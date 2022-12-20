@@ -238,6 +238,21 @@ int NumProcess(void)
   return count;
 }
 
+//Return the maximum PID amongst PIDs of all currently active processes in the system
+int MaxPID(void)
+{
+  struct proc *process;
+  int Max = -1;
+  acquire(&ptable.lock);
+
+  for(process = ptable.proc; process < &ptable.proc[NPROC]; process++)
+  {
+    if (process->pid > Max) Max = process->pid;
+  }
+
+  release(&ptable.lock);
+  return Max;
+}
 
 // Exit the current process.  Does not return.
 // An exited process remains in the zombie state

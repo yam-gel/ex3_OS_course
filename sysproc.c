@@ -20,6 +20,12 @@ sys_NumProcess(void)
 }
 
 int
+sys_MaxPID(void)
+{
+  return MaxPID();
+}
+
+int
 sys_exit(void)
 {
   exit();

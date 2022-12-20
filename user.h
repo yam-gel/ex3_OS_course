@@ -25,6 +25,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int NumProcess(void);
+int MaxPID(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
