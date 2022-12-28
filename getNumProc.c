@@ -4,6 +4,6 @@
 
 int main()
 {
-    printf(1,"%d", NumProcess());
+    printf(1,"%d\n", NumProcess());
     exit();
 }

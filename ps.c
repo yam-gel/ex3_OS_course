@@ -21,12 +21,12 @@ int main(void)
 		pid = i;
 		if (getProcInfo(pid, &info) == 0) 
 		{
-			if (info.state == 1) strcpy(state, "embryo");
-			else if (info.state == 2) strcpy(state, "sleep");
-			else if (info.state == 3) strcpy(state, "runnable");
-			else if (info.state == 4) strcpy(state, "run");
-			else if (info.state == 2) strcpy(state, "zombie");
-			printf(1, "%d          %s           %d            %d        1         %d\n", pid, state, info.ppid, info.sz, info.nrswitch);
+			if (info.state == 1) strcpy(state, "EMBRYO  ");
+			else if (info.state == 2) strcpy(state, "SLEEP   ");
+			else if (info.state == 3) strcpy(state, "RUNNABLE");
+			else if (info.state == 4) strcpy(state, "RUN     ");
+			else if (info.state == 2) strcpy(state, "ZOMBIE  ");
+			printf(1, "%d          %s      %d         %d       %d         %d\n", pid, state, info.ppid, info.sz, info.nfd, info.nrswitch);
 		}
 			
 	}

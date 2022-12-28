@@ -4,6 +4,6 @@
 
 int main()
 {
-    printf(1,"%d", MaxPID());
+    printf(1,"%d\n", MaxPID());
     exit();
 }

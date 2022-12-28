@@ -7,6 +7,7 @@
 #include "proc.h"
 #include "spinlock.h"
 #include "processInfo.h"
+#include "stddef.h"
 
 struct {
   struct spinlock lock;
@@ -120,7 +121,7 @@ found:
 //get Process information
 int getProcInfo(int pid, struct processInfo *proc)
 {
-  int id = 0;
+
   struct proc *process;
   acquire(&ptable.lock);
 
@@ -132,16 +133,20 @@ int getProcInfo(int pid, struct processInfo *proc)
       proc->sz = process->sz;
       if (process->pid == 1) proc->ppid = 0;
       else proc->ppid = process->parent->pid;
-      pid = process->pid;
       proc->state = process->state;
       proc->sz = process->sz;
       proc->nrswitch = process->nrswitch;
 
+      int j = 0;
+      for (int i = 0; i<NOFILE; i++) 
+      {
+        if (process->ofile[i]) j++;
+      }
+      proc->nfd= j;
       
       release(&ptable.lock);
       
-      ////nfd? 
-      return id;
+      return 0;
     }
   }
 
@@ -236,10 +241,15 @@ fork(void)
 
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
-
+  //int j = 0;
   for(i = 0; i < NOFILE; i++)
     if(curproc->ofile[i])
+    {
       np->ofile[i] = filedup(curproc->ofile[i]);
+      //j++;
+    }
+  //np->nfd = j;
+      
   np->cwd = idup(curproc->cwd);
 
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
