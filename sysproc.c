@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "processInfo.h"
 
 int
 sys_fork(void)
@@ -23,6 +24,17 @@ int
 sys_MaxPID(void)
 {
   return MaxPID();
+}
+
+int
+sys_getProcInfo(void)
+{
+  struct processInfo* proc; 
+  int pid; 
+
+  if (argint(0, &pid)<0 || argptr(1,(void*)&proc,sizeof(*proc))<0) return -1;
+
+  return getProcInfo(pid,proc);
 }
 
 int

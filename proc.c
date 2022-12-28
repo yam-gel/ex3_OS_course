@@ -6,7 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-//#include "processInfo.h"
+#include "processInfo.h"
 
 struct {
   struct spinlock lock;
@@ -113,7 +113,40 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  p->nrswitch = 0; //initiallize num of context switches
   return p;
+}
+
+//get Process information
+int getProcInfo(int pid, struct processInfo *proc)
+{
+  int id = 0;
+  struct proc *process;
+  acquire(&ptable.lock);
+
+  for(process = ptable.proc; process < &ptable.proc[NPROC]; process++)
+  {
+    if (process->state == UNUSED) continue; 
+    if (process->pid == pid)
+    {
+      proc->sz = process->sz;
+      if (process->pid == 1) proc->ppid = 0;
+      else proc->ppid = process->parent->pid;
+      pid = process->pid;
+      proc->state = process->state;
+      proc->sz = process->sz;
+      proc->nrswitch = process->nrswitch;
+
+      
+      release(&ptable.lock);
+      
+      ////nfd? 
+      return id;
+    }
+  }
+
+  release(&ptable.lock);
+  return -1; 
 }
 
 //PAGEBREAK: 32
@@ -375,6 +408,7 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      p->nrswitch++; 
 
       swtch(&(c->scheduler), p->context);
       switchkvm();

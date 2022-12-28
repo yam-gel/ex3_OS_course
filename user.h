@@ -26,6 +26,7 @@ int sleep(int);
 int uptime(void);
 int NumProcess(void);
 int MaxPID(void);
+int getProcInfo(int, struct processInfo*);
 
 // ulib.c
 int stat(const char*, struct stat*);
